@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { Html5Qrcode } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
 import { ScanLine, Upload, QrCode, Loader2, CheckCircle, Heart, Camera } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -12,15 +13,35 @@ export default function ScannerPage() {
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleScan = () => {
-    setScanState("scanning");
-    setTimeout(() => {
-      setScanState("success");
-      setTimeout(() => {
-        navigate("/patient");
-      }, 1800);
-    }, 2800);
-  };
+ const handleScan = async () => {
+  setScanState("scanning");
+
+  try {
+    const qr = new Html5Qrcode("qr-reader");
+
+    await qr.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: 250,
+      },
+      (decodedText) => {
+        console.log("Scanned:", decodedText);
+        setScanState("success");
+
+        qr.stop();
+
+        setTimeout(() => {
+          navigate("/patient");
+        }, 1500);
+      },
+      (error) => {}
+    );
+  } catch (err) {
+    console.error("Camera error:", err);
+  }
+};
+
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -57,11 +78,9 @@ export default function ScannerPage() {
               style={{ background: "hsl(var(--primary-light))" }}>
 
               {scanState === "idle" && (
-                <div className="flex flex-col items-center gap-3">
-                  <QrCode className="w-20 h-20 text-primary opacity-30" />
-                  <p className="text-sm text-muted-foreground font-medium">Position QR code here</p>
-                </div>
-              )}
+  <div id="qr-reader" className="w-full h-full flex items-center justify-center"></div>
+)}
+
 
               {scanState === "scanning" && (
                 <div className="relative w-full h-full flex items-center justify-center">
