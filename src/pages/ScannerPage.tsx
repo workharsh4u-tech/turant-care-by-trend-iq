@@ -13,32 +13,56 @@ export default function ScannerPage() {
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
- const handleScan = async () => {
+const handleScan = async () => {
 
   setScanState("scanning");
 
-  const qr = new Html5Qrcode("qr-reader");
+  // wait for div to render
+  setTimeout(async () => {
 
-  await qr.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
+    const qrContainer = document.getElementById("qr-reader");
 
-    (decodedText) => {
+    if (!qrContainer) {
+      console.error("QR container not found");
+      return;
+    }
 
-      console.log(decodedText);
+    const qr = new Html5Qrcode("qr-reader");
 
-      setScanState("success");
+    try {
 
-      qr.stop();
+      await qr.start(
+        {
+          facingMode: "environment"
+        },
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 }
+        },
+        (decodedText) => {
 
-      navigate("/patient");
+          console.log("Scanned:", decodedText);
 
-    },
+          qr.stop();
 
-    () => {}
-  );
+          setScanState("success");
+
+          // redirect to patient profile
+          setTimeout(() => {
+            navigate("/patient");
+          }, 500);
+
+        },
+        (error) => {}
+      );
+
+    } catch (err) {
+      console.error(err);
+    }
+
+  }, 300);
+
 };
-
 
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
