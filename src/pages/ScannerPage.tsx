@@ -74,8 +74,12 @@ export default function ScannerPage() {
             />
 
             {/* Scanner Frame */}
-            <div className="absolute inset-4 rounded-xl overflow-hidden flex items-center justify-center"
-              style={{ background: "hsl(var(--primary-light))" }}>
+            <div
+              id="qr-reader"
+              className="absolute inset-4 rounded-xl overflow-hidden"
+              style={{ background: "black" }}
+            ></div>
+
 
               {scanState === "idle" && (
   <div id="qr-reader" className="w-full h-full flex items-center justify-center"></div>
