@@ -14,33 +14,31 @@ export default function ScannerPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
  const handleScan = async () => {
+
   setScanState("scanning");
 
-  try {
-    const qr = new Html5Qrcode("qr-reader");
+  const qr = new Html5Qrcode("qr-reader");
 
-    await qr.start(
-      { facingMode: "environment" },
-      {
-        fps: 10,
-        qrbox: 250,
-      },
-      (decodedText) => {
-        console.log("Scanned:", decodedText);
-        setScanState("success");
+  await qr.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
 
-        qr.stop();
+    (decodedText) => {
 
-        setTimeout(() => {
-          navigate("/patient");
-        }, 1500);
-      },
-      (error) => {}
-    );
-  } catch (err) {
-    console.error("Camera error:", err);
-  }
+      console.log(decodedText);
+
+      setScanState("success");
+
+      qr.stop();
+
+      navigate("/patient");
+
+    },
+
+    () => {}
+  );
 };
+
 
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
