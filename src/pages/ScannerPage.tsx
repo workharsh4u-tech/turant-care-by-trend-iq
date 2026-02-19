@@ -96,11 +96,33 @@ const handleScan = async () => {
             />
 
             {/* Scanner Frame */}
-            <div
-              id="qr-reader"
-              className="absolute inset-4 rounded-xl overflow-hidden"
-              style={{ background: "black" }}
-            ></div>
+            <div className="absolute inset-4 rounded-xl overflow-hidden">
+
+  {scanState === "idle" && (
+    <div className="flex items-center justify-center h-full">
+      <QrCode className="w-20 h-20 text-primary opacity-30" />
+    </div>
+  )}
+
+  {scanState === "scanning" && (
+    <div
+      id="qr-reader"
+      style={{
+        width: "100%",
+        height: "100%",
+        background: "black"
+      }}
+    />
+  )}
+
+  {scanState === "success" && (
+    <div className="flex items-center justify-center h-full">
+      <CheckCircle className="w-16 h-16 text-success" />
+    </div>
+  )}
+
+</div>
+
 
 
               {scanState === "idle" && (
