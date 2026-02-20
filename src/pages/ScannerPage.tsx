@@ -74,7 +74,7 @@ export default function ScannerPage() {
     navigate(`/profile/${patientId}`);
   }, 800);
 
-}
+},
           () => {}
         );
 
