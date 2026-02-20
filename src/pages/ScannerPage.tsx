@@ -60,19 +60,21 @@ export default function ScannerPage() {
 
   setScanState("success");
 
-  // extract patient ID from QR
-  let patientId = decodedText;
+  // FIX: extract valid patient ID
+  let patientId = "TC-2024-001847"; // default demo patient
 
-  // if QR contains URL, use default demo patient
-  if (decodedText.startsWith("http")) {
-    patientId = "TC-2024-001847";
+  // if QR directly contains patientId, use it
+  if (decodedText.startsWith("TC-")) {
+    patientId = decodedText;
   }
+
+  console.log("Opening patient:", patientId);
 
   setTimeout(() => {
     navigate(`/profile/${patientId}`);
   }, 800);
 
-},
+}
           () => {}
         );
 
