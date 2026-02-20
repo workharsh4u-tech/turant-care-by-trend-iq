@@ -1,74 +1,133 @@
-# Welcome to your Lovable project
+Turant Care — Smart Health Card & PharmaGuard AI
 
-## Project info
+Instant patient identification. AI-powered drug safety. Life-saving decisions in seconds.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+🚀 Overview
 
-## How can I edit this code?
+Turant Care is an intelligent healthcare platform that enables doctors to instantly access complete patient medical records by scanning a Smart Health QR card.
 
-There are several ways of editing your application.
+It also includes PharmaGuard AI, which analyzes genetic data to detect dangerous drug reactions and recommend safer alternatives.
 
-**Use Lovable**
+This system helps prevent medical errors, accelerates emergency response, and improves patient safety.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+🎯 Problem Statement
 
-Changes made via Lovable will be committed automatically to this repo.
+In emergency situations, doctors often lack access to critical patient data such as:
 
-**Use your preferred IDE**
+Medical history
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Allergies
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Current medications
 
-Follow these steps:
+Genetic drug risks
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+This leads to:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Delayed treatment
 
-# Step 3: Install the necessary dependencies.
-npm i
+Wrong prescriptions
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Preventable medical complications
 
-**Edit a file directly in GitHub**
+💡 Solution
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Turant Care solves this using:
 
-**Use GitHub Codespaces**
+Smart Health QR Card
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Instant QR scanning system
 
-## What technologies are used for this project?
+Secure patient dashboard
 
-This project is built with:
+AI-powered pharmacogenomic analysis
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Doctors can scan and instantly access full patient medical profiles.
 
-## How can I deploy this project?
+🧠 Key Features
+📷 Smart QR Scanner
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Instant patient identification
 
-## Can I connect a custom domain to my Lovable project?
+Real-time camera QR scanning
 
-Yes, you can!
+Fast and secure access
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+👨‍⚕️ Patient Dashboard
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
-# turant-care
+Medical history
+
+Allergies and medications
+
+Contact and identity info
+
+🤖 PharmaGuard AI
+
+Detects genetic drug risks
+
+Prevents harmful prescriptions
+
+Suggests safer alternatives
+
+⚡ Real-Time Access
+
+Emergency-ready system
+
+Instant profile loading
+
+Fast navigation
+
+🖥️ Demo Flow
+
+Open doctor dashboard
+
+Click Scan Patient Card
+
+Scan QR code
+
+Instantly open patient profile
+
+View PharmaGuard AI risk analysis
+
+🏗️ Tech Stack
+
+Frontend:
+
+React
+
+TypeScript
+
+Vite
+
+Tailwind CSS
+
+shadcn-ui
+
+Core Libraries:
+
+html5-qrcode
+
+React Router
+
+React Query
+
+Deployment:
+
+Vercel
+
+📁 Project Structure
+src/
+│
+├── pages/
+│   ├── ScannerPage.tsx
+│   ├── PatientProfile.tsx
+│   ├── DoctorDashboard.tsx
+│
+├── components/
+│   ├── DashboardLayout.tsx
+│
+├── data/
+│   ├── mockData.ts
+│
+├── App.tsx
+├── main.tsx
