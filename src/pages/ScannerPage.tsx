@@ -51,19 +51,39 @@ export default function ScannerPage() {
             qrbox: 250,
           }
 
-          (decodedText) => {
+        (decodedText) => {
 
-  console.log("Scanned:", decodedText);
+ console.log("Scanned:", decodedText);
 
-  if (qrInstance) {
-    qrInstance.stop();
+scanner.stop();
+
+setScanState("success");
+
+// FIX: extract valid patient ID
+let patientId = "TC-2024-001847"; // default demo patient
+
+// if QR contains TC ID, use it
+if (decodedText.startsWith("TC-")) {
+  patientId = decodedText;
+}
+
+// if QR contains URL, extract last part
+if (decodedText.includes("/")) {
+  const parts = decodedText.split("/");
+  const lastPart = parts[parts.length - 1];
+
+  if (lastPart.startsWith("TC-")) {
+    patientId = lastPart;
   }
+}
 
-  setScanState("success");
+console.log("Opening patient:", patientId);
 
-  setTimeout(() => {
-    navigate(`/profile/${decodedText}`);
-  }, 800);
+setTimeout(() => {
+
+  navigate(`/profile/${patientId}`);
+
+}, 800);
 
 }
         
