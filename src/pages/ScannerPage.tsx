@@ -49,8 +49,9 @@ export default function ScannerPage() {
           {
             fps: 10,
             qrbox: 250,
-          },
-         (decodedText) => {
+          }
+
+          (decodedText) => {
 
   console.log("Scanned:", decodedText);
 
@@ -60,21 +61,12 @@ export default function ScannerPage() {
 
   setScanState("success");
 
-  // FIX: extract valid patient ID
-  let patientId = "TC-2024-001847"; // default demo patient
-
-  // if QR directly contains patientId, use it
-  if (decodedText.startsWith("TC-")) {
-    patientId = decodedText;
-  }
-
-  console.log("Opening patient:", patientId);
-
   setTimeout(() => {
-    navigate(`/profile/${patientId}`);
+    navigate(`/profile/${decodedText}`);
   }, 800);
 
-},
+}
+        
           () => {}
         );
 
