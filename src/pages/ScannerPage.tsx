@@ -59,7 +59,7 @@ export default function ScannerPage() {
             setScanState("success");
 
             setTimeout(() => {
-              navigate("/patient");
+              navigate(`/profile/${decodedText}`);
             }, 1000);
 
           },
