@@ -50,19 +50,29 @@ export default function ScannerPage() {
             fps: 10,
             qrbox: 250,
           },
-          (decodedText) => {
+         (decodedText) => {
 
-            console.log("Scanned:", decodedText);
+  console.log("Scanned:", decodedText);
 
-            scanner.stop();
+  if (qrInstance) {
+    qrInstance.stop();
+  }
 
-            setScanState("success");
+  setScanState("success");
 
-            setTimeout(() => {
-              navigate(`/profile/${decodedText}`);
-            }, 1000);
+  // extract patient ID from QR
+  let patientId = decodedText;
 
-          },
+  // if QR contains URL, use default demo patient
+  if (decodedText.startsWith("http")) {
+    patientId = "TC-2024-001847";
+  }
+
+  setTimeout(() => {
+    navigate(`/profile/${patientId}`);
+  }, 800);
+
+},
           () => {}
         );
 
