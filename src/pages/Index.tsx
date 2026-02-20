@@ -84,7 +84,7 @@ export default function Index() {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "var(--gradient-primary)" }}>
-              <Heart className="w-5 h-5 text-white" />
+              <img src="/logo.png" alt="Turant Care Logo" className="h-8 w-8 object-contain" />
             </div>
             <div>
               <span className="font-bold text-foreground text-sm">Turant Care</span>
