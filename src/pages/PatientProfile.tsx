@@ -1,11 +1,25 @@
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, User, Heart, Dna, Shield, Activity, Pill, AlertTriangle, Calendar, Phone, Mail, MapPin, Droplets, FileText, ChevronRight, Download, Share2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
-import { mockPatient, mockMedicalHistory, mockGeneticProfile, mockPharmaGuardResult } from "@/data/mockData";
+import { mockPatient, mockMedicalHistory, mockGeneticProfile, mockPharmaGuardResult, mockRecentPatients } from "@/data/mockData";
 
 export default function PatientProfile() {
   const { patientId } = useParams();
-  const p = mockPatient;
+
+// find patient from mockRecentPatients OR fallback to mockPatient
+const p =
+  mockRecentPatients.find((patient) => patient.id === patientId) ||
+  mockPatient;
+  if (!p) {
+  return (
+    <DashboardLayout title="Patient Not Found">
+      <div className="text-center mt-10">
+        <h2 className="text-xl font-bold">Patient not found</h2>
+        <p className="text-muted-foreground">Invalid QR code</p>
+      </div>
+    </DashboardLayout>
+  );
+}
   const mh = mockMedicalHistory;
   const gp = mockGeneticProfile;
   const pgx = mockPharmaGuardResult;
