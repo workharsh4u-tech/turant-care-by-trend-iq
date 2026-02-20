@@ -14,17 +14,15 @@ export default function ScannerPage() {
 
   const scannerRef = useRef<Html5Qrcode | null>(null);
 
-  // START CAMERA WHEN scanState === scanning
   useEffect(() => {
 
     if (scanState !== "scanning") return;
 
-    const startCamera = async () => {
+    const startScanner = async () => {
 
       try {
 
         const scanner = new Html5Qrcode("qr-reader");
-
         scannerRef.current = scanner;
 
         const cameras = await Html5Qrcode.getCameras();
@@ -34,23 +32,26 @@ export default function ScannerPage() {
           return;
         }
 
+        // select back camera if available
+        const backCamera =
+          cameras.find(c => c.label.toLowerCase().includes("back")) ||
+          cameras[cameras.length - 1];
+
         await scanner.start(
-          cameras[0].id,
+          backCamera.id,
           {
             fps: 10,
-            qrbox: 250,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1
           },
-
-          // SUCCESS CALLBACK
           (decodedText) => {
 
-            console.log("Scanned:", decodedText);
+            console.log("QR SCANNED:", decodedText);
 
             scanner.stop();
 
             setScanState("success");
 
-            // extract patient ID
             let patientId = "TC-2024-001847";
 
             if (decodedText.startsWith("TC-")) {
@@ -59,10 +60,10 @@ export default function ScannerPage() {
 
             if (decodedText.includes("/")) {
               const parts = decodedText.split("/");
-              const lastPart = parts[parts.length - 1];
+              const last = parts[parts.length - 1];
 
-              if (lastPart.startsWith("TC-")) {
-                patientId = lastPart;
+              if (last.startsWith("TC-")) {
+                patientId = last;
               }
             }
 
@@ -70,32 +71,27 @@ export default function ScannerPage() {
 
             setTimeout(() => {
               navigate(`/profile/${patientId}`);
-            }, 800);
+            }, 500);
 
           },
-
-          // ERROR CALLBACK
           (error) => {
-            // ignore
+            // ignore scan errors
           }
-
         );
 
       } catch (err) {
-
-        console.error("Camera error:", err);
-
+        console.error("Scanner error:", err);
       }
 
     };
 
-    setTimeout(startCamera, 300);
+    setTimeout(startScanner, 300);
 
     return () => {
-      scannerRef.current?.stop().catch(() => {});
+      scannerRef.current?.stop().catch(()=>{});
     };
 
-  }, [scanState]);
+  }, [scanState, navigate]);
 
 
   const handleScan = () => {
@@ -116,43 +112,35 @@ export default function ScannerPage() {
 
           <div className="relative mx-auto w-72 h-72">
 
-            <div className="absolute inset-0 rounded-xl overflow-hidden bg-black">
+            <div className="absolute inset-0 rounded-xl overflow-hidden">
 
               {scanState === "idle" && (
-
-                <div className="flex items-center justify-center h-full">
-                  <QrCode className="w-20 h-20 text-white opacity-40"/>
+                <div className="flex items-center justify-center h-full bg-gray-100">
+                  <QrCode className="w-20 h-20 opacity-40"/>
                 </div>
-
               )}
 
               {scanState === "scanning" && (
-
                 <div
                   id="qr-reader"
                   style={{
                     width: "100%",
-                    height: "100%",
+                    height: "100%"
                   }}
                 />
-
               )}
 
               {scanState === "success" && (
-
                 <div className="flex items-center justify-center h-full bg-green-100">
                   <CheckCircle className="w-16 h-16 text-green-600"/>
                 </div>
-
               )}
 
             </div>
 
           </div>
 
-
           {scanState === "idle" && (
-
             <button
               onClick={handleScan}
               className="btn-primary-medical w-full mt-6 flex items-center justify-center gap-2"
@@ -160,23 +148,18 @@ export default function ScannerPage() {
               <Camera className="w-4 h-4"/>
               Scan Smart Health Card
             </button>
-
           )}
 
           {scanState === "scanning" && (
-
             <p className="mt-4 text-blue-600 font-semibold">
               Camera is ON — show QR code
             </p>
-
           )}
 
           {scanState === "success" && (
-
             <p className="mt-4 text-green-600 font-semibold">
               Patient Found — opening profile...
             </p>
-
           )}
 
         </div>
