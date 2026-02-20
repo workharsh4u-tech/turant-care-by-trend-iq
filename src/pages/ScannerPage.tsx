@@ -1,14 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
-import {
-  Upload,
-  QrCode,
-  CheckCircle,
-  Heart,
-  Camera,
-} from "lucide-react";
-
+import { QrCode, CheckCircle, Camera } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 
 type ScanState = "idle" | "scanning" | "success";
@@ -21,10 +14,7 @@ export default function ScannerPage() {
 
   const scannerRef = useRef<Html5Qrcode | null>(null);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-
-  // THIS useEffect STARTS CAMERA ONLY AFTER DIV IS READY
+  // START CAMERA WHEN scanState === scanning
   useEffect(() => {
 
     if (scanState !== "scanning") return;
@@ -49,45 +39,46 @@ export default function ScannerPage() {
           {
             fps: 10,
             qrbox: 250,
+          },
+
+          // SUCCESS CALLBACK
+          (decodedText) => {
+
+            console.log("Scanned:", decodedText);
+
+            scanner.stop();
+
+            setScanState("success");
+
+            // extract patient ID
+            let patientId = "TC-2024-001847";
+
+            if (decodedText.startsWith("TC-")) {
+              patientId = decodedText;
+            }
+
+            if (decodedText.includes("/")) {
+              const parts = decodedText.split("/");
+              const lastPart = parts[parts.length - 1];
+
+              if (lastPart.startsWith("TC-")) {
+                patientId = lastPart;
+              }
+            }
+
+            console.log("Opening:", patientId);
+
+            setTimeout(() => {
+              navigate(`/profile/${patientId}`);
+            }, 800);
+
+          },
+
+          // ERROR CALLBACK
+          (error) => {
+            // ignore
           }
 
-        (decodedText) => {
-
- console.log("Scanned:", decodedText);
-
-scanner.stop();
-
-setScanState("success");
-
-// FIX: extract valid patient ID
-let patientId = "TC-2024-001847"; // default demo patient
-
-// if QR contains TC ID, use it
-if (decodedText.startsWith("TC-")) {
-  patientId = decodedText;
-}
-
-// if QR contains URL, extract last part
-if (decodedText.includes("/")) {
-  const parts = decodedText.split("/");
-  const lastPart = parts[parts.length - 1];
-
-  if (lastPart.startsWith("TC-")) {
-    patientId = lastPart;
-  }
-}
-
-console.log("Opening patient:", patientId);
-
-setTimeout(() => {
-
-  navigate(`/profile/${patientId}`);
-
-}, 800);
-
-}
-        
-          () => {}
         );
 
       } catch (err) {
@@ -98,20 +89,17 @@ setTimeout(() => {
 
     };
 
-    // IMPORTANT DELAY FOR RENDER
     setTimeout(startCamera, 300);
 
     return () => {
-      scannerRef.current?.stop().catch(()=>{});
+      scannerRef.current?.stop().catch(() => {});
     };
 
   }, [scanState]);
 
 
   const handleScan = () => {
-
     setScanState("scanning");
-
   };
 
 
@@ -128,19 +116,18 @@ setTimeout(() => {
 
           <div className="relative mx-auto w-72 h-72">
 
-            {/* CAMERA CONTAINER */}
-
-            <div
-              className="absolute inset-0 rounded-xl overflow-hidden bg-black"
-            >
+            <div className="absolute inset-0 rounded-xl overflow-hidden bg-black">
 
               {scanState === "idle" && (
+
                 <div className="flex items-center justify-center h-full">
                   <QrCode className="w-20 h-20 text-white opacity-40"/>
                 </div>
+
               )}
 
               {scanState === "scanning" && (
+
                 <div
                   id="qr-reader"
                   style={{
@@ -148,20 +135,21 @@ setTimeout(() => {
                     height: "100%",
                   }}
                 />
+
               )}
 
               {scanState === "success" && (
+
                 <div className="flex items-center justify-center h-full bg-green-100">
                   <CheckCircle className="w-16 h-16 text-green-600"/>
                 </div>
+
               )}
 
             </div>
 
           </div>
 
-
-          {/* BUTTON */}
 
           {scanState === "idle" && (
 
