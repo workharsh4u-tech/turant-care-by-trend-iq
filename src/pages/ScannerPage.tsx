@@ -1,4 +1,3 @@
-```tsx
 import { useState, useRef } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
